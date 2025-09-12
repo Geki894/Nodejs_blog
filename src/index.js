@@ -11,6 +11,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 //HTTP logger
 app.use(morgan('combined'));
 
+//middleware to parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded({
+  extended: true
+}));
+//middleware to parse JSON bodies (as sent by API clients)
+app.use(express.json());
+
 //template engine
 app.engine('hbs', handlebars.engine({ extname: 'hbs'}));
 app.set('view engine', 'hbs');
@@ -19,11 +26,19 @@ app.set('views', path.join(__dirname, 'resources/views'));
 
 app.get('/', (req, res) => {
   res.render('home');
-})
+});
 
 app.get('/news', (req, res) => {
   res.render('news');
-})
+});
+
+app.get('/search', (req, res) => {
+  res.render('search');
+});
+
+app.post('/search', (req, res) => {
+  res.send('POST request to the search page');
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
